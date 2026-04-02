@@ -107,7 +107,7 @@ router.post('/setUserPic', upload.single('image'), async function (req, res) {
 				try {
 					await userCollection.updateOne(
 						{ _id: new ObjectId(user_id) },
-						{ $set: { image_id: image_uuid } }
+						{ $set: { image_id: result.public_id } }
 					);
 
 					res.redirect('/');
