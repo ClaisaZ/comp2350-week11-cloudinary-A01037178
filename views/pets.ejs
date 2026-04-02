@@ -31,8 +31,6 @@
 
 										<% if (allPets[i].image_id) { %>
 											<td>
-												<p>cloud_name: <%= cloud_name %></p>
-												<p>image_id: <%= allPets[i].image_id %></p>
 												<img
 													src="https://res.cloudinary.com/<%= cloud_name %>/image/upload/<%= allPets[i].image_id %>"
 													alt="pet image"
@@ -49,31 +47,29 @@
 										<% } else { %>
 											<td colspan="2">
 												<form action="/setPetPic" method="post" enctype="multipart/form-data">
-													<div class="field is-horizontal">
-														<input type="hidden" name="pet_id" value="<%= allPets[i].pet_id %>"/>
-														<input type="hidden" name="user_id" value="<%= user_id %>"/>
+													<input type="hidden" name="pet_id" value="<%= allPets[i].pet_id %>"/>
+													<input type="hidden" name="user_id" value="<%= user_id %>"/>
 
-														<div class="file is-info has-name is-small is-right">
+													<div class="is-flex is-align-items-center" style="gap: 10px;">
+														<div class="file is-info has-name is-small">
 															<label class="file-label">
-																<input class="file-input" type="file" name="image"/>
+																<input class="file-input" type="file" name="image">
 																<span class="file-cta">
-																	<span class="file-icon"><i class="fas fa-upload"></i></span>
+																	<span class="file-icon">
+																		<i class="fas fa-upload"></i>
+																	</span>
 																	<span class="file-label">Choose a file…</span>
 																</span>
 																<span class="file-name">No File</span>
 															</label>
 														</div>
 
-														&nbsp;
-
-														<div class="field">
-															<button class="button is-link is-small" type="submit">
-																<span>Upload</span>
-																<span class="icon is-small">
-																	<i class="fas fa-image"></i>
-																</span>
-															</button>
-														</div>
+														<button class="button is-link is-small" type="submit">
+															<span>Upload</span>
+															<span class="icon is-small">
+																<i class="fas fa-image"></i>
+															</span>
+														</button>
 													</div>
 												</form>
 											</td>
@@ -124,5 +120,20 @@
 				</div>
 			</div>
 		</section>
+
+		<script>
+			document.querySelectorAll('.file-input').forEach((input) => {
+				input.addEventListener('change', () => {
+					const fileBox = input.closest('.file');
+					const fileName = fileBox.querySelector('.file-name');
+
+					if (input.files.length > 0) {
+						fileName.textContent = input.files[0].name;
+					} else {
+						fileName.textContent = 'No File';
+					}
+				});
+			});
+		</script>
 	</body>
 </html>
