@@ -56,8 +56,14 @@ router.get('/', async (req, res) => {
 				return item;
 			});
 
-			console.log(users);
-
+			console.log("USERS ON HOME PAGE:");
+			users.forEach((user) => {
+				console.log({
+					id: user._id.toString(),
+					email: user.email,
+					image_id: user.image_id
+				});
+			});
 			res.render('index', {
 				allUsers: users,
 				cloud_name: process.env.CLOUDINARY_CLOUD_NAME
