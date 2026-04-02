@@ -34,7 +34,7 @@
 								<td><%= allPets[i].name %></td>
 								<% if (allPets[i].image_id) { %>
 									<td>
-										<script type="text/javascript">document.write($.cloudinary.imageTag('<%- allPets[i].image_id %>', {height: 100, width: 100, crop: "fit"}).toHtml());</script>
+										<img src="https://res.cloudinary.com/<%= cloud_name %>/image/upload/c_fit,h_100,w_100/<%= allPets[i].image_id %>.png" alt="pet image">
 									<% } else { %>
 									<td colspan="2">
 										<form action="/setPetPic" method="post" enctype="multipart/form-data">
