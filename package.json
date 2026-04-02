@@ -1,0 +1,23 @@
+{
+	"name": "tutorial",
+	"version": "1.0.0",
+	"scripts": {
+		"start": "nodemon index.js"
+	},
+	"dependencies": {
+		"bcrypt": "^6.0.0",
+		"cloudinary": "^2.8.0",
+		"cloudinary-jquery": "^2.14.0",
+		"dotenv": "^17.2.3",
+		"ejs": "^3.1.10",
+		"express": "^5.2.1",
+		"express-mongo-sanitize": "^2.2.0",
+		"joi": "^18.0.2",
+		"mongodb": "^7.0.0",
+		"multer": "^2.0.2",
+		"mysql2": "^3.16.0",
+		"uuid": "^13.0.0"
+	},
+	"author": "Patrick",
+	"license": "ISC"
+}
