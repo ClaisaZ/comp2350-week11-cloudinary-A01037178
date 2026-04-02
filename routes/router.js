@@ -90,10 +90,10 @@ router.post('/setUserPic', upload.single('image'), async function (req, res) {
 		}
 
 		cloudinary.uploader.upload(
-			"data:image/octet-stream;base64," + buf64,
+			"data:image/png;base64," + buf64,
 			async function (error, result) {
 				if (error) {
-					console.log(error);
+					console.log("Cloudinary user upload error:", error);
 					return res.render('error', { message: 'Error uploading image to Cloudinary' });
 				}
 
