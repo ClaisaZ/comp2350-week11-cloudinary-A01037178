@@ -7,7 +7,6 @@ global.include = function(file) {
 	return require(abs_path('/' + file));
 }
 
-
 require('dotenv').config();
 
 const express = require('express');
@@ -18,14 +17,11 @@ const port = process.env.PORT || 3025;
 const app = express();
 app.set('view engine', 'ejs');
 
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(express.static(__dirname + "/public"));
-app.use('/',router);
+app.use('/', router);
 
-app.listen(port, () => {
-	console.log("Node application listening on port "+port);
-}); 
-
-
-
+app.listen(port, '0.0.0.0', () => {
+	console.log("Node application listening on port " + port);
+});
