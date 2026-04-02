@@ -40,7 +40,7 @@
 										<form action="/setPetPic" method="post" enctype="multipart/form-data">
 											<div class="field is-horizontal">
 												<input type="hidden" name="pet_id" value="<%= allPets[i].pet_id %>"/>
-												<input type="hidden" name="user_id" value="<%= allPets[i].user_id %>"/>
+												<input type="hidden" name="user_id" value="<%= user_id %>"/>
 												<div id="picture-upload" class="file is-info has-name is-small is-right">
 													<label class="file-label">
 														<input class="file-input" type="file" name="image"/>

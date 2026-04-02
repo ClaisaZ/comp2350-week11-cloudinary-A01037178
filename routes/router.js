@@ -92,55 +92,48 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-router.post('/setPetPic', upload.single('image'), function(req, res, next) {
-	let image_uuid = uuid();
-	let pet_id = req.body.pet_id;
-	let user_id = req.body.user_id;
-	let buf64 = req.file.buffer.toString('base64');
-	stream = cloudinary.uploader.upload("data:image/octet-stream;base64," + buf64, async function(result) { 
-			try {
-				console.log(result);
+router.post('/setPetPic', upload.single('image'), async function(req, res) {
+	try {
+		if (!req.file) {
+			return res.render('error', { message: 'No image file was uploaded' });
+		}
 
-				console.log("userId: "+user_id);
+		let image_uuid = uuid();
+		let pet_id = req.body.pet_id;
+		let user_id = req.body.user_id;
+		let buf64 = req.file.buffer.toString('base64');
 
+		cloudinary.uploader.upload(
+			"data:image/octet-stream;base64," + buf64,
+			async function(result) {
+				try {
+					const schema = Joi.object({
+						pet_id: Joi.string().alphanum().min(24).max(24).required(),
+						user_id: Joi.string().alphanum().min(24).max(24).required()
+					});
 
-				// Joi validate
-				const schema = Joi.object(
-				{
-					pet_id: Joi.string().alphanum().min(24).max(24).required(),
-					user_id: Joi.string().alphanum().min(24).max(24).required()
-				});
-			
-				const validationResult = schema.validate({pet_id, user_id});
-				if (validationResult.error != null) {
-					console.log(validationResult.error);
+					const validationResult = schema.validate({ pet_id, user_id });
+					if (validationResult.error) {
+						return res.render('error', { message: 'Invalid pet_id or user_id' });
+					}
 
-					res.render('error', {message: 'Invalid pet_id or user_id'});
-					return;
-				}				
-				const success = await petCollection.updateOne({"_id": new ObjectId(pet_id)},
-					{$set: {image_id: image_uuid}},
-					{}
-				);
+					await petCollection.updateOne(
+						{ _id: new ObjectId(pet_id) },
+						{ $set: { image_id: image_uuid } }
+					);
 
-				if (!success) {
-					res.render('error', {message: 'Error uploading pet image to MongoDB'});
-					console.log("Error uploading pet image");
-				}
-				else {
 					res.redirect(`/showPets?id=${user_id}`);
+				} catch (ex) {
+					console.log(ex);
+					res.render('error', { message: 'Error saving image to MongoDB' });
 				}
-			}
-			catch(ex) {
-				res.render('error', {message: 'Error connecting to MongoDB'});
-				console.log("Error connecting to MongoDB");
-				console.log(ex);
-			}
-		}, 
-		{ public_id: image_uuid }
-	);
-	console.log(req.body);
-	console.log(req.file);
+			},
+			{ public_id: image_uuid }
+		);
+	} catch (ex) {
+		console.log(ex);
+		res.render('error', { message: 'Error uploading image' });
+	}
 });
 
 router.get('/showPets', async (req, res) => {
