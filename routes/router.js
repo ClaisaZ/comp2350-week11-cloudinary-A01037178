@@ -76,9 +76,10 @@ router.post('/setUserPic', upload.single('image'), async function (req, res) {
 			return res.render('error', { message: 'No image file was uploaded' });
 		}
 
-		let image_uuid = uuid();
-		let user_id = req.body.user_id;
-		let buf64 = req.file.buffer.toString('base64');
+		const image_uuid = uuid();
+		const user_id = req.body.user_id;
+		const buf64 = req.file.buffer.toString('base64');
+		const mimeType = req.file.mimetype;
 
 		const schema = Joi.object({
 			user_id: Joi.string().alphanum().min(24).max(24).required()
@@ -90,7 +91,7 @@ router.post('/setUserPic', upload.single('image'), async function (req, res) {
 		}
 
 		cloudinary.uploader.upload(
-			"data:image/png;base64," + buf64,
+			`data:${mimeType};base64,${buf64}`,
 			async function (error, result) {
 				if (error) {
 					console.log("Cloudinary user upload error:", error);
@@ -169,7 +170,7 @@ router.post('/setPetPic', upload.single('image'), async function (req, res) {
 		}
 
 		cloudinary.uploader.upload(
-			"data:image/octet-stream;base64," + buf64,
+			`data:${req.file.mimetype};base64,${buf64}`,
 			async function (error, result) {
 				if (error) {
 					console.log(error);
